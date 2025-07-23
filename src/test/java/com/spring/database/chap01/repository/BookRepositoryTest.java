@@ -56,5 +56,19 @@ class BookRepositoryTest {
         System.out.println("flag = " + flag);
     }
 
+    @Test
+    @DisplayName("도서의 ID 번호를 주면 도서가 삭제된다")
+    void deleteTest() {
+        //given
+        Long givenId = 6L;
+
+        //when
+        boolean flag = bookRepository.deleteById(givenId);
+
+        //then
+        assertTrue(flag);
+        System.out.println("flag = " + flag);
+    }
+
 
 }
