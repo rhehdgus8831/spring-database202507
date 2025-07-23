@@ -47,7 +47,7 @@ public class BookRepository {
     }
 
     // 도서 제목, 저자 수정
-    public boolean updateTittleAndAuthor(Book book){
+    public boolean updateTitleAndAuthor(Book book){
 
         try(Connection conn = dataSource.getConnection()){
 
