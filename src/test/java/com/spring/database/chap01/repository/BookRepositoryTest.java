@@ -51,7 +51,7 @@ class BookRepositoryTest {
                 .build();
 
         //when
-        boolean flag = bookRepository.updateTittleAndAuthor(upadtedBook);
+        boolean flag = bookRepository.updateTitleAndAuthor(upadtedBook);
 
         //then
         Assertions.assertTrue(flag);
