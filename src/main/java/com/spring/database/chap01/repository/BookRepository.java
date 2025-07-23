@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -78,7 +83,7 @@ public class BookRepository {
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
-            pstmt.setLong(1,id.getId());
+            pstmt.setLong(1,id);
 
             return pstmt.executeUpdate() == 1;
 
@@ -89,8 +94,36 @@ public class BookRepository {
 
     }
 
+    // 전체 조회 - ORM (Object Relational Mapping)
+    public List<Book> findAll() {
+
+        ArrayList<Book> bookList = new ArrayList<>();
+
+        try(Connection conn = dataSource.getConnection()){
+            String sql = """
+                    SELECT * FROM books
+                    """;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+
+                bookList.add(new Book(rs));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+        return bookList;
+    }
+
+    // ID로 단일 조회 메서드
+    public Book findById(Long id){
 
 
+    }
 
 }
 
