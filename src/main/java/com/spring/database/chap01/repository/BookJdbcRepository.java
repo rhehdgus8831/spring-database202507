@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Repository
+@Repository("bjr")
 // 역할 : 데이터 베이스에 접근해서 CRUD를 수행하는 객체
 public class BookJdbcRepository implements BookRepository{
 
