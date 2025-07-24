@@ -1,4 +1,4 @@
-package com.spring.database.practice.routes;
+package com.spring.database.chap01.practice.routes;
 
 
 import org.springframework.stereotype.Controller;

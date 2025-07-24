@@ -1,6 +1,7 @@
 package com.spring.database.practice.repository;
 
-import com.spring.database.practice.entitly.Stock;
+import com.spring.database.chap01.practice.entitly.Stock;
+import com.spring.database.chap01.practice.repository.StockRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

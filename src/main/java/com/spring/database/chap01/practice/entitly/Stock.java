@@ -1,4 +1,4 @@
-package com.spring.database.practice.entitly;
+package com.spring.database.chap01.practice.entitly;
 
 import lombok.*;
 

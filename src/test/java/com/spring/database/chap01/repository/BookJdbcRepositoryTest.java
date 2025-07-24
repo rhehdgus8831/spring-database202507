@@ -12,12 +12,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest // 스프링 컨텍스트에서 관리되는 빈을 꺼내올 수 있음
-class BookRepositoryTest {
+class BookJdbcRepositoryTest {
 
     // 테스트 프레임워크 : JUnit
     // 5 버전부터는 생성자 주입을 막아놈 - 필드 주입 해야함 (테스트에서만)
     @Autowired
-    BookRepository bookRepository;
+    BookJdbcRepository bookJdbcRepository;
 
     // 테스트 메서드
     @Test
@@ -33,7 +33,7 @@ class BookRepositoryTest {
                 .build();
 
         // when - 실제 테스트가 벌어지는 상황
-        boolean flag = bookRepository.save(givenBook);
+        boolean flag = bookJdbcRepository.save(givenBook);
 
         // then - 테스트 결과 (단언)
         Assertions.assertTrue(flag);
@@ -51,7 +51,7 @@ class BookRepositoryTest {
                 .build();
 
         //when
-        boolean flag = bookRepository.updateTitleAndAuthor(upadtedBook);
+        boolean flag = bookJdbcRepository.updateTitleAndAuthor(upadtedBook);
 
         //then
         Assertions.assertTrue(flag);
@@ -65,7 +65,7 @@ class BookRepositoryTest {
         Long givenId = 6L;
 
         //when
-        boolean flag = bookRepository.deleteById(givenId);
+        boolean flag = bookJdbcRepository.deleteById(givenId);
 
         //then
         assertTrue(flag);
@@ -80,7 +80,7 @@ class BookRepositoryTest {
 
         //when
 
-        List<Book> bookList = bookRepository.findAll();
+        List<Book> bookList = bookJdbcRepository.findAll();
 
         //then
         bookList.forEach(System.out::println);
@@ -98,7 +98,7 @@ class BookRepositoryTest {
         Long givenId = 5L;
         //when
 
-        Book foundBook = bookRepository.findById(givenId);
+        Book foundBook = bookJdbcRepository.findById(givenId);
 
         //then
 

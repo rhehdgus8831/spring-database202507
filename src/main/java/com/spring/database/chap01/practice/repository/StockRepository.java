@@ -1,8 +1,7 @@
-package com.spring.database.practice.repository;
+package com.spring.database.chap01.practice.repository;
 
-import com.spring.database.practice.entitly.Stock;
+import com.spring.database.chap01.practice.entitly.Stock;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.model.ast.AbstractTableDelete;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

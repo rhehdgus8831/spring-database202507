@@ -1,7 +1,7 @@
-package com.spring.database.practice.controller; // 패키지 경로는 맞게 수정해주세요.
+package com.spring.database.chap01.practice.api; // 패키지 경로는 맞게 수정해주세요.
 
-import com.spring.database.practice.entitly.Stock; // Stock 엔티티 경로
-import com.spring.database.practice.repository.StockRepository; // StockRepository 경로
+import com.spring.database.chap01.practice.entitly.Stock; // Stock 엔티티 경로
+import com.spring.database.chap01.practice.repository.StockRepository; // StockRepository 경로
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
