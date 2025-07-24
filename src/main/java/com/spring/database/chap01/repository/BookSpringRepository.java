@@ -3,8 +3,11 @@ package com.spring.database.chap01.repository;
 import com.spring.database.chap01.entity.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 // Spring JDBC로 도서 CRUD를 관리
@@ -57,11 +60,19 @@ public class BookSpringRepository implements BookRepository{
 
     @Override
     public List<Book> findAll() {
-        return List.of();
+        String sql = """
+                    SELECT * FROM books
+                    """;
+
+        return template.query(sql, (ResultSet rs, int rowNum) -> new Book(rs));
     }
 
     @Override
     public Book findById(Long id) {
-        return null;
+        String sql = """
+                    SELECT * FROM books
+                    WHERE id = ?
+                    """;
+        return template.queryForObject(sql,(ResultSet rs, int n) -> new Book(rs),id);
     }
 }
