@@ -16,7 +16,7 @@
     </insert>
 
     <update id="update">
-        UPDATE tbl_set
+        UPDATE tbl_pet
         SET
             pet_name = #{petName}
             , pet_age = #{petAge}
@@ -41,6 +41,7 @@
     <select id ="findAll" resultType="Pet">
         SELECT *
         FROM tbl_pet
+        ORDER BY pet_name
     </select>
 
 
