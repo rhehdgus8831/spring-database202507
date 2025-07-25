@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+// @RestController
 @RequestMapping("/api/v1/stocks") // JS 파일의 const URL = '/api/v1/stocks' 와 일치
 @RequiredArgsConstructor
 public class StockController {

@@ -20,10 +20,10 @@
         .add-btn { background-color: var(--primary-color); color: white; }
         .edit-submit-btn { background-color: var(--secondary-color); color: white; margin-top: 10px; }
         .del-btn { background-color: var(--danger-color); color: white; padding: 5px 10px; font-size: 0.8rem; width: auto; }
-        .stock-list { list-style: none; }
-        .stock-list li { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
-        .stock-info h3 { margin: 0; font-size: 1.2rem; }
-        .stock-info p { margin: 5px 0 0; color: #555; font-size: 0.9rem; }
+        .stockV2-list { list-style: none; }
+        .stockV2-list li { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 10px; }
+        .stockV2-info h3 { margin: 0; font-size: 1.2rem; }
+        .stockV2-info p { margin: 5px 0 0; color: #555; font-size: 0.9rem; }
         .actions button { margin-left: 10px; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background-color: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; position: relative; }
@@ -34,7 +34,7 @@
 
     <div class="container">
         <h1>
-            📈 주식 관리 시스템 (총 <span class="stock-count">0</span>개)
+            📈 주식 관리 시스템 (총 <span class="stockV2-count">0</span>개)
         </h1>
 
         <div class="form-container">
@@ -68,7 +68,7 @@
 
         <div class="list-container">
             <h2>📑 보유 주식 목록</h2>
-            <ul class="stock-list">
+            <ul class="stockV2-list">
             </ul>
         </div>
     </div>
@@ -103,31 +103,31 @@
             const URL = '/api/v1/stocks';
 
             // DOM 요소
-            const $stockList = document.querySelector('.stock-list');
-            const $stockCount = document.querySelector('.stock-count');
+            const $stockV2List = document.querySelector('.stockV2-list');
+            const $stockCount = document.querySelector('.stockV2-count');
             const $modal = document.getElementById('edit-modal');
             const $editForm = document.getElementById('edit-form');
             const $closeBtn = document.querySelector('.close-btn');
 
             // 렌더링 함수
             const renderStocks = (stocks) => {
-                $stockList.innerHTML = ''; // 목록 초기화
+                $stockV2List.innerHTML = ''; // 목록 초기화
                 $stockCount.textContent = stocks.length; // 총 개수 업데이트
 
-                stocks.forEach(stock => {
+                stocks.forEach(stockV2 => {
                     const li = document.createElement('li');
-                    li.dataset.id = stock.id;
+                    li.dataset.id = stockV2.id;
                     li.innerHTML = `
-                        <div class="stock-info">
-                            <h3>${stock.stockName} (${stock.stockCode})</h3>
-                            <p>수량: ${stock.quantity}주 | 평단가: ${stock.purchasePrice.toLocaleString()}$ | 매수일: ${stock.purchaseDate}</p>
+                        <div class="stockV2-info">
+                            <h3>${stockV2.stockName} (${stockV2.stockCode})</h3>
+                            <p>수량: ${stockV2.quantity}주 | 평단가: ${stockV2.purchasePrice.toLocaleString()}$ | 매수일: ${stockV2.purchaseDate}</p>
                         </div>
                         <div class="actions">
                             <button class="edit-btn">수정</button>
                             <button class="del-btn">삭제</button>
                         </div>
                     `;
-                    $stockList.appendChild(li);
+                    $stockV2List.appendChild(li);
                 });
             };
 
@@ -166,12 +166,12 @@
             // 모달 여닫기 함수
             const openModal = async (id) => {
                 const res = await fetch(`${URL}/${id}`);
-                const stock = await res.json();
+                const stockV2 = await res.json();
 
-                document.getElementById('edit-id').value = stock.id;
-                document.getElementById('edit-quantity').value = stock.quantity;
-                document.getElementById('edit-price').value = stock.purchasePrice;
-                document.getElementById('edit-date').value = stock.purchaseDate;
+                document.getElementById('edit-id').value = stockV2.id;
+                document.getElementById('edit-quantity').value = stockV2.quantity;
+                document.getElementById('edit-price').value = stockV2.purchasePrice;
+                document.getElementById('edit-date').value = stockV2.purchaseDate;
 
                 $modal.style.display = 'flex';
             };
@@ -195,7 +195,7 @@
                     e.target.reset();
                 });
 
-                $stockList.addEventListener('click', e => {
+                $stockV2List.addEventListener('click', e => {
                     if (e.target.closest('li')) {
                         const id = e.target.closest('li').dataset.id;
                         if (e.target.matches('.del-btn')) {

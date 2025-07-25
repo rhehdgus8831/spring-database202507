@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace에는 연결할 인터페이스의 풀네임 (패키지명 + 클래스명을 작성)-->
+<mapper namespace="com.spring.database.chap03.practice.stockMapper">
+
+<!--    boolean save(Stock stockV2);-->
+    <insert id="save">
+        INSERT INTO stocks
+        (stock_code, stock_name, quantity, purchase_price, purchase_date)
+        VALUES
+        (#{stockCode},#{stockName},#{quantity},#{purchasePrice},#{purchaseDate})
+    </insert>
+
+<!--    boolean updateStock(Stock stockV2);-->
+<!--    boolean deleteById(Long id);-->
+<!--    Stock findById(Long id);-->
+<!--    Stock findAll();-->
+
+</mapper>

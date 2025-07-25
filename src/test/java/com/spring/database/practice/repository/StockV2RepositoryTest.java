@@ -2,6 +2,7 @@ package com.spring.database.practice.repository;
 
 import com.spring.database.chap01.practice.entitly.Stock;
 import com.spring.database.chap01.practice.repository.StockRepository;
+import com.spring.database.chap03.practice.entitly.StockV2;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class StockRepositoryTest {
+class StockV2RepositoryTest {
 
     @Autowired
     StockRepository stockRepository;
