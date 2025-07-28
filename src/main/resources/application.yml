@@ -1,26 +1,35 @@
-
 server:
   port: 9001
 
 spring:
   application:
     name: spring-db202507
-
-  # Spring DB ?? !??
   datasource:
     url: jdbc:mariadb://localhost:3306/spring_study
     username: root
     password: mariadb
 
-# myBatis setting
+  jpa:
+    hibernate:
+      ddl-auto: create   #  distribute -> none
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+
+# MyBatis Setting
 mybatis:
   # SQL file location
   mapper-locations: classpath:mappers/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.spring.database
+  type-aliases-package: com.spring.database.chap03
+
 
 logging:
   level:
     root: INFO
     com.spring.database: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
