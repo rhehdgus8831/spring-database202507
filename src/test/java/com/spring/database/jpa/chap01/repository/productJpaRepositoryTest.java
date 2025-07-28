@@ -126,6 +126,23 @@ class ProductJpaRepositoryTest {
         //then
     }
 
+    @Test
+    @DisplayName("상품을 전체조회하면 총 4개의 상품이 조회된다.")
+    void findAllTest() {
+        //given
+
+        //when
+        List<Product> productList = productJpaRepository.findAll();
+        // long count = ProductJpaRepository.count();
+
+        //then
+        productList.forEach(System.out::println);
+        assertEquals(4,productList.size());
+        // System.out.println("count = " + count);
+    }
+
+
+
 
 
 
