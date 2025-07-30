@@ -13,7 +13,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "tbl_student")
-public class Student {
+public class Students {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

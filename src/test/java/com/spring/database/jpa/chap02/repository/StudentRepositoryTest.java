@@ -1,6 +1,7 @@
 package com.spring.database.jpa.chap02.repository;
 
-import com.spring.database.jpa.chap02.entity.Student;
+import com.spring.database.jpa.chap02.entity.Students;
+import com.spring.database.jpa.chap04.pracitce.entity.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,29 +17,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class StudentRepositoryTest {
 
     @Autowired
-    StudentRepository studentRepository;
+    StudentsRepository studentsRepository;
 
     @BeforeEach
     void bulkSave(){
-        Student s1 = Student.builder()
+        Students s1 = Students.builder()
                 .name("쿠로미")
                 .city("청양군")
                 .major("경제학")
                 .build();
 
-        Student s2 = Student.builder()
+        Students s2 = Students.builder()
                 .name("춘식이")
                 .city("서울시")
                 .major("컴퓨터공학")
                 .build();
 
-        Student s3 = Student.builder()
+        Students s3 = Students.builder()
                 .name("어피치")
                 .city("제주도")
                 .major("화학공학")
                 .build();
 
-        studentRepository.saveAllAndFlush(
+        studentsRepository.saveAllAndFlush(
                 List.of(s1,s2,s3)
         );
     }
@@ -49,7 +50,7 @@ class StudentRepositoryTest {
         //given
         String name = "춘식이";
         //when
-        List<Student> students = studentRepository.findByName(name);
+        List<Students> students = studentsRepository.findByName(name);
         //then
         assertEquals(1,students.size());
         assertEquals("컴퓨터공학",students.get(0).getMajor());
@@ -65,7 +66,7 @@ class StudentRepositoryTest {
         String major = "화학공학";
         //when
         // WHERE city = ? AND major = ?
-        List<Student> students = studentRepository.findByCityAndMajor(city, major);
+        List<Students> students = studentsRepository.findByCityAndMajor(city, major);
         //then
         students.forEach(System.out::println);
     }
@@ -76,7 +77,7 @@ class StudentRepositoryTest {
         //given
         String containingMajor = "공학";
         //when
-        List<Student> students = studentRepository.findByMajorContaining(containingMajor);
+        List<Students> students = studentsRepository.findByMajorContaining(containingMajor);
         //then
         students.forEach(System.out::println);
     }
@@ -87,7 +88,7 @@ class StudentRepositoryTest {
         //given
         String city = "서울시";
         //when
-        List<Student> students = studentRepository.getStudentByCity(city);
+        List<Students> students = studentsRepository.getStudentByCity(city);
         //then
         students.forEach(System.out::println);
     }
@@ -99,7 +100,7 @@ class StudentRepositoryTest {
         String name = "어피치";
         String city = "제주도";
         //when
-        List<Student> students = studentRepository.getStudents(name, city);
+        List<Students> students = studentsRepository.getStudents(name, city);
         //then
         students.forEach(System.out::println);
     }

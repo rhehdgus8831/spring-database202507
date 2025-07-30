@@ -32,7 +32,7 @@ public class Enrollment {
     private Course course;
 
     @Column(name = "enroll_date")
-    private LocalDateTime enrollDate; // 수강 신청일
+    LocalDateTime enrollDate; // 수강 신청일
 
     @Column(name = "progress_rate")
     private Integer progressRate; // 진도율 0~100
