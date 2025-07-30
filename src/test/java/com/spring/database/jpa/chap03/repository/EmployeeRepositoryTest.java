@@ -190,5 +190,34 @@ class EmployeeRepositoryTest {
         //then
     }
 
+    @Test
+    @DisplayName("N + 1 문제 확인")
+    void nPlusOneTest() {
+        //given
+
+        //when
+        List<Employee> departments = employeeRepository.findAll();
+
+        //then
+        departments.forEach(dept -> {
+            System.out.println("dept = " + dept + dept.getDepartment());
+        });
+
+    }
+
+    @Test
+    @DisplayName("N + 1 문제 해결을 위한 fetch join")
+    void fetchJoinTest() {
+        //given
+
+        //when
+        List<Department> departments = departmentRepository.findAllByFetch();
+        //then
+        departments.forEach(d -> {
+            System.out.println(" d = " + d + d.getEmployees());
+                }
+        );
+    }
+
 
 }
