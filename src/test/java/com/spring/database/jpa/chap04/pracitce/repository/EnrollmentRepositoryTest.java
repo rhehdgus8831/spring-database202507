@@ -89,7 +89,43 @@ class EnrollmentRepositoryTest {
         System.out.println("================================");
     }
 
+    @Test
+    @DisplayName("김철수의 '리액트' 강의 수강 신청 진도율을 85%로 업데이트해야 한다.")
+    void updateTest(){
+        //given
+        // 1. 김철수 학생과 리액트 강의로 기존 수강신청 데이터를 생성
+        Enrollment enrollment = Enrollment.builder()
+                .student(s1)
+                .course(c1)
+                .progressRate(20) // 초기 진도율 20%
+                .completed(false)
+                .build();
+        Enrollment savedEnrollment = enrollmentRepository.save(enrollment);
 
+        // 영속성 컨텍스트 비우기
+        em.flush();
+        em.clear();
+
+        //when
+        // 2. 수정할 수강신청 정보를 조회
+        Enrollment foundEnrollment = enrollmentRepository.findById(savedEnrollment.getId()).orElseThrow();
+
+        // 3. 진도율을 85%로 변경
+        foundEnrollment.setProgressRate(85);
+
+        // 4. 변경된 엔티티를 저장 (JPA가 변경을 감지하고 UPDATE 실행)
+        enrollmentRepository.save(foundEnrollment);
+
+        // 영속성 컨텍스트 비우기
+        em.flush();
+        em.clear();
+
+        //then
+        // 5. 다시 조회하여 진도율이 85%로 변경되었는지 확인
+        Enrollment updatedEnrollment = enrollmentRepository.findById(savedEnrollment.getId()).orElseThrow();
+        assertEquals(85, updatedEnrollment.getProgressRate());
+        System.out.println("Updated Enrollment: " + updatedEnrollment);
+    }
 
 
 
