@@ -133,4 +133,62 @@ class EmployeeRepositoryTest {
         System.out.println("\n\nemployees = " + employees + employees.size());
     }
 
+    @Test
+    @DisplayName("부서가 제거되면 CASCADE REMOVE에 의해 해당 부서 사원이 모두 삭제된다.")
+    void cascadeTest() {
+        //given
+        Long deptId = 1L;
+        //when
+        departmentRepository.deleteById(deptId);
+        //then
+    }
+
+    @Test
+    @DisplayName("양방향 매핑 리스트에서 사원을 추가하면 DB에도 INSERT된다.")
+    void persistTest() {
+        //given
+        // 부서조회
+        Department department = departmentRepository.findById(2L).orElseThrow();
+        // 새로운 사원 생성
+        Employee employee = Employee.builder()
+                .name("파이리")
+          //      .department(department)
+                .build();
+        //when
+        // employeeRepository.save(employee);
+        // department.getEmployees().add(employee);
+
+        department.addEmployee(employee);
+
+        em.flush();
+        em.clear();
+
+        //then
+        Employee foundEmp = employeeRepository.findById(5L).orElseThrow();
+        System.out.println("foundEmp = " + foundEmp);
+        System.out.println("foundEmp.getDepartment = " + foundEmp.getDepartment());
+    }
+
+    @Test
+    @DisplayName("양방향 매핑 리스트에서 사원을 제거하면 실제 DB에서 DELETE된다.")
+    void orphanRemovalTest() {
+        //given
+
+        // 1번 부서 조회
+        Department foundDept = departmentRepository.findById(1L).orElseThrow();
+        // 1번 부서의 모든 사원을 조회
+        //List<Employee> employees = employeeRepository.findByDeptId(1L);
+        List<Employee> employees = foundDept.getEmployees();
+        employees.forEach(System.out::println);
+
+        // 1번 사원을 지우고 싶음
+       // employeeRepository.deleteById(1L);
+        Employee remove = employees.remove(0);
+
+        //when
+
+        //then
+    }
+
+
 }
