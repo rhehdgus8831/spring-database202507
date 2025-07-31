@@ -94,6 +94,66 @@ public class QueryDslSortTest {
         idolList.forEach(System.out::println);
 
     }
+    
+    @Test
+    @DisplayName("아이돌을 이름 기준으로 오름차순으로 정렬하여 조회")
+    void nameSortTest () {
+        //given
+        
+        //when
+        List<Idol> idolList = factory.selectFrom(idol)
+                .orderBy(idol.idolName.asc())
+                .fetch();
+        
+        //then
+        System.out.println("\n\n================================");
+        idolList.forEach(System.out::println);
+        
+    }
+    
+    @Test
+    @DisplayName("아이돌을 나이 기준으로 내림차순 정렬하고, 페이지당 3명씩 페이징 처리하여 1번째 페이지의 아이돌을 조회")
+    void sortAndPagingTest() {
+        //given
+        int limit = 3;
+        int pageNo = 1;
+        int offset = (pageNo - 1) * limit;
+        //when
+        List<Idol> idolList = factory.selectFrom(idol)
+                .orderBy(idol.age.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+
+        //then
+        System.out.println("\n\n================================");
+        idolList.forEach(System.out::println);
+
+    }
+    
+    @Test
+    @DisplayName("\"아이브\" 그룹의 아이돌을 이름 기준으로 오름차순 정렬하고, 페이지당 2명씩 페이징 처리하여 첫 번째 페이지의 아이돌을 조회")
+    void iveSortAndPagingTest () {
+        //given
+        int limit = 2;
+        int pageNo = 1;
+        int offset = (pageNo - 1) * limit;
+
+        String groupName = "아이브";
+
+        //when
+        List<Idol> idolList = factory.selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .orderBy(idol.idolName.asc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+
+        //then
+        System.out.println("\n\n================================");
+        idolList.forEach(System.out::println);
+    }
+    
 
 
 
