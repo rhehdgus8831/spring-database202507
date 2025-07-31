@@ -1,10 +1,12 @@
 package com.spring.database.querydsl.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.spring.database.jpa.chap04.pracitce.repository.StudentRepository;
 import com.spring.database.querydsl.entity.Group;
 import com.spring.database.querydsl.entity.Idol;
 import com.spring.database.querydsl.entity.QIdol;
 import jakarta.persistence.EntityManager;
+import org.aspectj.weaver.loadtime.Agent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,8 @@ class QueryDslBasicTest {
 
     @Autowired
     JPAQueryFactory factory; // QueryDsl 핵심객체 (스피링 자동관리를 안하기 때문에 @Bean으로 수동 등록)
+    @Autowired
+    private StudentRepository studentRepository;
 
     @BeforeEach
     void setUp() {
@@ -151,7 +155,7 @@ class QueryDslBasicTest {
     //    JPAQueryFactory factory = new JPAQueryFactory(em);
         //when
         Idol foundIdol = factory
-                .selectFrom(idol)
+                .selectFrom(idol) // qiodl 스태틱 임포트 처리
                 .where(idol.idolName.eq("사쿠라"))
                 .fetchOne();
         //then
@@ -234,9 +238,98 @@ class QueryDslBasicTest {
 
     }
 
+    @Test
+    @DisplayName("나이가 24세 이상인 아이돌 조회")
+    void testAgeGoe() {
+        // given
+        int ageThreshold = 24;
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.age.goe(ageThreshold))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+
+        for (Idol idol : result) {
+            System.out.println("\n\nIdol: " + idol);
+            assertTrue(idol.getAge() >= ageThreshold);
+        }
+    }
+
+    @Test
+    @DisplayName("이름에 '김'이 포함된 아이돌 조회")
+    void testNameContains() {
+        // given
+        String substring = "김";
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.idolName.contains(substring))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getIdolName().contains(substring));
+        }
+    }
+
+    @Test
+    @DisplayName("나이가 20세에서 25세 사이인 아이돌 조회")
+    void testAgeBetween() {
+        // given
+        int ageStart = 20;
+        int ageEnd = 25;
 
 
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.age.between(ageStart, ageEnd))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertTrue(idol.getAge() >= ageStart && idol.getAge() <= ageEnd);
+        }
+    }
 
 
+    @Test
+    @DisplayName("르세라핌 그룹에 속한 아이돌 조회")
+    void testGroupEquals() {
+        /* 순수 SQL 작성시
+        String sql = """
+                SELECT i.*
+                FROM tbl_idol i
+                INNER JOIN tbl_group g
+                ON i.group_id = g.group_id
+                WHERE g.group_name = '르세라핌'
+
+                """;
+        */
+        // given
+        String groupName = "르세라핌";
+
+        // when
+        List<Idol> result = factory
+                .selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Idol idol : result) {
+            System.out.println("Idol: " + idol);
+            assertEquals(groupName, idol.getGroup().getGroupName());
+        }
+    }
 
 }

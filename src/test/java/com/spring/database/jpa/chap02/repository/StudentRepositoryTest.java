@@ -2,6 +2,7 @@ package com.spring.database.jpa.chap02.repository;
 
 import com.spring.database.jpa.chap02.entity.Students;
 import com.spring.database.jpa.chap04.pracitce.entity.Student;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,9 @@ class StudentRepositoryTest {
 
     @Autowired
     StudentsRepository studentsRepository;
+
+    @Autowired
+    EntityManager em;
 
     @BeforeEach
     void bulkSave(){
@@ -105,6 +109,30 @@ class StudentRepositoryTest {
         students.forEach(System.out::println);
     }
 
+    @Test
+    @DisplayName("데이터 잘라서 가져오기")
+    void pagingTest() {
+
+        for (int i = 0; i < 1000; i++) {
+            Students students = Students.builder()
+                    .name("가상의 이름" + i)
+                    .major("가상의 전공" + i)
+                    .city("가상의 도시" + i)
+                    .build();
+            studentsRepository.save(students);
+        }
+
+        String sql = """
+                SELECT * FROM tbl_student
+                    ORDER BY  stu_name
+                LIMIT 5 OFFSET 0
+                """;
+
+        List<Students> resultList = (List<Students>) em.createNativeQuery(sql, Students.class)
+                .getResultList();
+
+        resultList.forEach(System.out::println);
+    }
 
 
 }
