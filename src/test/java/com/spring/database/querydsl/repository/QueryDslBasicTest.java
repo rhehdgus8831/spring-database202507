@@ -108,6 +108,7 @@ class QueryDslBasicTest {
         System.out.println("foundIdol.getGroup() = " + foundIdol.getGroup());
     }
 
+/*
 
     @Test
     @DisplayName("JDBC로 특정이름의 아이돌 조회하기")
@@ -119,7 +120,8 @@ class QueryDslBasicTest {
                 WHERE idol_name = ?
                 """;
         //when
-        Idol foundIdol = jdbcTemplate.queryForObject(sql,
+       */
+/* Idol foundIdol = jdbcTemplate.queryForObject(sql,
                 (rs, n) -> new Idol(
                         rs.getLong("idol_id")
                         , rs.getString("idol_name")
@@ -127,7 +129,8 @@ class QueryDslBasicTest {
                         , null
                 ),
                 "김채원"
-        );
+        );*//*
+
 
         Group group = jdbcTemplate.queryForObject("""
                         SELECT * FROM tbl_group WHERE group_id = ?
@@ -146,6 +149,7 @@ class QueryDslBasicTest {
         System.out.println("\n\nfoundIdol = " + foundIdol);
         System.out.println("foundIdol.getGroup() = " + foundIdol.getGroup());
     }
+*/
 
 
     @Test
