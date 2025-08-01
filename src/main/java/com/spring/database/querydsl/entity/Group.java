@@ -6,12 +6,12 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode
 @Getter
 @Setter
-@ToString(exclude = {"idols"})
-@AllArgsConstructor
+@ToString(exclude = {"idols", "albums"})
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 
 @Entity
@@ -28,21 +28,23 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Idol> idols = new ArrayList<>();
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Album> albums = new ArrayList<>();
+
     public Group(String groupName) {
         this.groupName = groupName;
     }
 
     // 양방향 리스트 편의 메서드
     // 데이터 추가
-    public void addIdol(Idol idol){
+    public void addIdol(Idol idol) {
         this.idols.add(idol);
         idol.setGroup(this);
     }
 
     // 데이터 제거
-    public void removeIdol(Idol idol){
+    public void removeIdol(Idol idol) {
         this.idols.remove(idol);
         idol.setGroup(null);
     }
-
 }

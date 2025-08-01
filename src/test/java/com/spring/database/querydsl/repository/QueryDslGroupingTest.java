@@ -1,8 +1,12 @@
 package com.spring.database.querydsl.repository;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.spring.database.querydsl.dto.GroupAverageAge;
 import com.spring.database.querydsl.entity.Group;
 import com.spring.database.querydsl.entity.Idol;
 import com.spring.database.querydsl.entity.QIdol;
@@ -15,8 +19,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.spring.database.querydsl.entity.QIdol.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @Transactional
@@ -77,21 +83,21 @@ public class QueryDslGroupingTest {
 
         //when
         List<Tuple> idolList = factory
-                .select(idol.idolName,idol.age)
+                .select(idol.idolName, idol.age)
                 .from(idol)
                 .fetch();
 
         for (Tuple tuple : idolList) {
             String name = tuple.get(idol.idolName);
             Integer age = tuple.get(idol.age);
-            System.out.printf("이름: %s , 나이: %d세\n" , name , age);
+            System.out.printf("이름: %s , 나이: %d세\n", name, age);
         }
         //then
     }
 
     @Test
     @DisplayName("전체 그룹화하기 - GROUP BY 없이 집계함수를 사용하는 것")
-    void groupByTest () {
+    void groupByTest() {
         //given
 
         //when
@@ -105,7 +111,7 @@ public class QueryDslGroupingTest {
 
     @Test
     @DisplayName("그룹별 인원수 세기")
-    void groupByCountTest () {
+    void groupByCountTest() {
         /*
             SELECT G.group_name, COUNT(*)
             FROM tbl_idol I
@@ -135,7 +141,7 @@ public class QueryDslGroupingTest {
 
     @Test
     @DisplayName("성별별 아이돌 인원수 세기")
-    void groupByGenderTest () {
+    void groupByGenderTest() {
         /*
             SELECT gender, COUNT(*)
             FROM tbl_idol
@@ -152,14 +158,14 @@ public class QueryDslGroupingTest {
         tuples.forEach(t -> {
             String gender = t.get(idol.gender);
             Long count = t.get(idol.count());
-            System.out.printf("[ %s ] : %d\n",gender,count);
+            System.out.printf("[ %s ] : %d\n", gender, count);
         });
     }
 
     @Test
     @DisplayName("아이돌 그룹별로 아이돌의 그룹명과 평균 나이를 조회하세요." +
             " 평균 나이가 20세와 25세 사이인 그룹만 조회합니다.")
-    void groupByGroupNameAndAvgAgeTest () {
+    void groupByGroupNameAndAvgAgeTest() {
         //given
 
         //when
@@ -178,7 +184,88 @@ public class QueryDslGroupingTest {
 
 
     }
-    
+
+
+    @Test
+    @DisplayName("Tuple 대신 DTO를 사용해서 조회데이터 매핑하기 ver.1")
+    void groupAvgDtoTest1() {
+        //given
+
+        //when
+
+        List<GroupAverageAge> results = factory
+                .select(idol.group.groupName, idol.age.avg())
+                .from(idol)
+                .groupBy(idol.group.groupName)
+                .having(idol.age.avg().between(20, 25))
+                .fetch()
+                .stream()
+                .map(GroupAverageAge::from)
+                .collect(Collectors.toUnmodifiableList());
+
+        //then
+
+        for (GroupAverageAge result : results) {
+            String groupName = result.getGroupName();
+            Double averageAge = result.getAverageAge();
+            System.out.printf("그룹명: %s, 평균나이: %.2f세\n", groupName, averageAge);
+        }
+    }
+
+    @Test
+    @DisplayName("Tuple 대신 DTO를 사용해서 조회데이터 매핑하기 ver.2")
+    void groupAvgDtoTest2() {
+        //given
+
+        //when
+        List<GroupAverageAge> results = factory
+                .select(
+                        Projections.constructor(
+                                // 사용할 DTO를 명시 ,  param , param
+                                GroupAverageAge.class, idol.group.groupName, idol.age.avg())
+                )
+                .from(idol)
+                .groupBy(idol.group.groupName)
+                .having(idol.age.avg().between(20, 25))
+                .fetch();
+        //then
+
+        for (GroupAverageAge result : results) {
+            String groupName = result.getGroupName();
+            Double averageAge = result.getAverageAge();
+            System.out.printf("그룹명: %s, 평균나이: %.2f세\n", groupName, averageAge);
+        }
+
+    }
+
+    @Test
+    @DisplayName("연령대별 아이돌 수 조회")
+    void testAgeGroupBy() {
+        // given
+        // 연령대를 기준으로 그룹화하고, 각 연령대에 속한 아이돌 수를 조회
+        NumberExpression<Integer> ageGroup = new CaseBuilder()
+                .when(idol.age.between(10, 19)).then(10)
+                .when(idol.age.between(20, 29)).then(20)
+                .when(idol.age.between(30, 39)).then(30)
+                .otherwise(0);
+
+        // when
+        List<Tuple> result = factory
+                .select(ageGroup, idol.count())
+                .from(idol)
+                .groupBy(ageGroup)
+                .having(idol.count().goe(2))
+                .fetch();
+
+        // then
+        assertFalse(result.isEmpty());
+        for (Tuple tuple : result) {
+            int ageGroupValue = tuple.get(ageGroup);
+            long count = tuple.get(idol.count());
+
+            System.out.println("\n\nAge Group: " + ageGroupValue + "대, Count: " + count);
+        }
+    }
 
 
 }
