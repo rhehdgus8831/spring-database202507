@@ -32,7 +32,7 @@ public class Post {
     @Column(length = 1000, nullable = false, name = "post-content")
     private String content; // 내용
 
-
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostTag> postTags = new ArrayList<>();
 
@@ -41,6 +41,7 @@ public class Post {
      * Post와 Tag 생성 후 PostTag에 연결하는 메서드
      * @param tag
      */
+
     public void addPostTag(Tag tag) {
 
         PostTag postTag = PostTag.builder()

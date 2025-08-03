@@ -79,22 +79,39 @@ class PostRepositoryTest {
 
       }
 
-        @Test
-            @DisplayName("데이터 생성 테스트")
-            void createPostTest() {
+      @Test
+      @DisplayName("데이터 생성 테스트")
+      void createPostTest() {
+       //given
 
-                //given
+          //when
+        Tag tag = Tag.builder().name("부동산 갤러리").build();
+        tagRepository.save(tag);
 
-            Tag tag = Tag.builder().name("부동산 갤러리").build();
+        Post post = Post.builder().writer("홈리스").title("두꺼비도 집이 있는데").content("두꺼비 헌 집도 못구하는 헬조선").build();
 
-            Post post = Post.builder().writer("홈리스").title("두꺼비도 집이 있는데").content("두꺼비 헌 집도 못구하는 헬조선").build();
+        post.addPostTag(tag);
 
+        postRepository.save(post);
 
+        em.flush();
+        em.clear();
+        //then
 
-            //when
+        Post foundPost = postRepository.findById(post.getId()).orElseThrow();
+        assertEquals(1, foundPost.getPostTags().size());
 
-                //then
-            }
+          System.out.println("======================================================");
+
+          // forEach를 사용해서 연결된 모든 태그의 이름을 출력
+          System.out.println("== 연결된 태그 목록 ==");
+          foundPost.getPostTags().forEach(postTag -> {
+              String tagName = postTag.getTag().getName();
+              System.out.println(" - 태그 이름: " + tagName);
+          });
+          System.out.println("======================================================");
+
+      }
 
 
 
