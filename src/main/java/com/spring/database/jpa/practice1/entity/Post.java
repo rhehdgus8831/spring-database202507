@@ -37,4 +37,18 @@ public class Post {
     private List<PostTag> postTags = new ArrayList<>();
 
 
+    /**
+     * Post와 Tag 생성 후 PostTag에 연결하는 메서드
+     * @param tag
+     */
+    public void addPostTag(Tag tag) {
+
+        PostTag postTag = PostTag.builder()
+                .post(this)
+                .tag(tag)
+                .build();
+
+        this.postTags.add(postTag);
+    }
+
 }
