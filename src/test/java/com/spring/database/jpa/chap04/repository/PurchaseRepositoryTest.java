@@ -192,8 +192,5 @@ class PurchaseRepositoryTest {
             List<Purchase> purchaseList = purchaseRepository.findAll();
             System.out.println("\n\n" +"after purchaseList = " + purchaseList + "\n\n");
         }
-
-
-
     }
 
